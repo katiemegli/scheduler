@@ -1,8 +1,8 @@
+import { initializeApp } from 'firebase/app';
+import { getDatabase, onValue, ref } from 'firebase/database';
 import { useState, useEffect } from 'react';
-import firebase from 'firebase/app';
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -23,8 +23,7 @@ const firebase = initializeApp(firebaseConfig);
 const database = getDatabase(firebase);
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+
 
 export const useData = (path, transform) => {
   const [data, setData] = useState();
@@ -32,9 +31,12 @@ export const useData = (path, transform) => {
   const [error, setError] = useState();
 
   useEffect(() => {
-    const dbRef = database.ref(path);
+    const dbRef = ref(database, path);
+    const devMode = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
+    if (devMode) { console.log(`loading ${path}`); }
     return onValue(dbRef, (snapshot) => {
       const val = snapshot.val();
+      if (devMode) { console.log(val); }
       setData(transform ? transform(val) : val);
       setLoading(false);
       setError(null);
