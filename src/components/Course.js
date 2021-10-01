@@ -2,6 +2,14 @@ import { hasConflict, getCourseTerm, timeParts } from "../utilities/times.js";
 import { setData, useUserState } from "../utilities/firebase.js";
 
 
+const getCourseNumber = course => (
+  course.id.slice(1, 4)
+);
+
+const toggle = (x, lst) => (
+  lst.includes(x) ? lst.filter(y => y !== x) : [x, ...lst]
+);
+
 const getCourseMeetingData = course => {
   const meets = prompt('Enter meeting data: MTuWThF hh:mm-hh:mm', course.meets);
   const valid = !meets || timeParts(meets).days;
@@ -42,12 +50,5 @@ const Course = ({ course, selected, setSelected }) => {
   );
 };
 
-  const getCourseNumber = course => (
-    course.id.slice(1, 4)
-  );
-
-  const toggle = (x, lst) => (
-    lst.includes(x) ? lst.filter(y => y !== x) : [x, ...lst]
-  );
 
   export default Course;

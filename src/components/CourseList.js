@@ -1,7 +1,7 @@
-import { terms, getCourseTerm } from '../utilities/times.js';
-import { signInWithGoogle, signOut, useUserState } from '../utilities/firebase.js';
 import { useState } from 'react';
 import Course from './Course.js';
+import { terms, getCourseTerm } from '../utilities/times.js';
+import { signInWithGoogle, signOut, useUserState } from '../utilities/firebase.js';
 
 
 const CourseList = ({ courses }) => {
@@ -24,44 +24,46 @@ const CourseList = ({ courses }) => {
     );
   };
 
-  const SignInButton = () => (
-    <button className="btn btn-secondary btn-sm"
-        onClick={() => signInWithGoogle()}>
-      Sign In
-    </button>
-  );
 
-  const SignOuButton = () => (
-    <button className="btn btn-secondary btn-sm"
-        onClick={() => signOut()}>
-      Sign Out
-    </button>
-  );
   
-  const TermSelector = ({term, setTerm}) => {
-    const [user] = useUserState();
-    return (
-      <div className="btn-toolbar justify-content-between">
-        <div className="btn-group">
-        { 
-          Object.values(terms).map(
-            value => <TermButton key={value} term={value} setTerm={setTerm} checked={value === term} />
-          )
-        }
-        </div>
-        { user ? <SignOuButton /> : <SignInButton /> }
+const TermSelector = ({term, setTerm}) => {
+  const [user] = useUserState();
+  return (
+    <div className="btn-toolbar justify-content-between">
+      <div className="btn-group">
+      { 
+        Object.values(terms).map(
+          value => <TermButton key={value} term={value} setTerm={setTerm} checked={value === term} />
+        )
+      }
       </div>
-    );
-  };
-
-  const TermButton = ({term, setTerm, checked}) => (
-    <>
-      <input type="radio" id={term} className="btn-check" checked={checked} autoComplete="off"
-        onChange={() => setTerm(term)} />
-      <label class="btn btn-success m-1 p-2" htmlFor={term}>
-      { term }
-      </label>
-    </>
+      { user ? <SignOuButton /> : <SignInButton /> }
+    </div>
   );
-  
-  export default CourseList;
+};
+
+const TermButton = ({term, setTerm, checked}) => (
+  <>
+    <input type="radio" id={term} className="btn-check" checked={checked} autoComplete="off"
+      onChange={() => setTerm(term)} />
+    <label class="btn btn-success m-1 p-2" htmlFor={term}>
+    { term }
+    </label>
+  </>
+);
+
+const SignInButton = () => (
+  <button className="btn btn-secondary btn-sm"
+      onClick={() => signInWithGoogle()}>
+    Sign In
+  </button>
+);
+
+const SignOuButton = () => (
+  <button className="btn btn-secondary btn-sm"
+      onClick={() => signOut()}>
+    Sign Out
+  </button>
+);
+
+export default CourseList;
